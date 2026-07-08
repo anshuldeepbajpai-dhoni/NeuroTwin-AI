@@ -1,3 +1,4 @@
+from .auth import CurrentUserResponse
 from .user import (
     UserBase,
     UserCreate,
