@@ -22,6 +22,7 @@ from fastapi import Depends
 from fastapi import HTTPException
 from app.api.auth import router as auth_router
 from app.exceptions import register_exception_handlers
+from app.api.profile import router as profile_router
 
 # Log application startup
 logger.info("Starting NeuroTwin AI Backend...")
@@ -73,6 +74,8 @@ Use **Authorize** button to login with JWT Bearer Token.
 Base.metadata.create_all(bind=engine)
 app.include_router(auth_router)
 register_exception_handlers(app)
+app.include_router(auth_router)
+app.include_router(profile_router)
 
 # CORS Configuration
 origins = [
