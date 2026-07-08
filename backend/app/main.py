@@ -10,7 +10,7 @@ from backend.app.core.logger import logger
 
 from backend.app.database.base import Base
 from backend.app.database.database import engine
-
+from backend.app.schemas import UserCreate
 from backend.app.models import User
 
 # Log application startup
@@ -110,4 +110,13 @@ def tables():
         "tables": [
             "users"
         ]
+    }
+
+
+@app.post("/schema-test")
+def schema_test(user: UserCreate):
+
+    return {
+        "message": "Schema validation successful",
+        "data": user
     }
