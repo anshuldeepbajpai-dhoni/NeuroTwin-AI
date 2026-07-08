@@ -14,9 +14,10 @@ def create_user(db: Session, user: UserCreate):
         raise ValueError("Username already exists")
 
     db_user = User(
-        username=user.username,
-        email=user.email,
-        password_hash=hash_password(user.password)
+    username=user.username,
+    email=user.email,
+    password_hash=hash_password(user.password),
+    role=user.role
     )
 
     db.add(db_user)

@@ -20,7 +20,7 @@ pwd_context = CryptContext(
 # Hash Password
 # -------------------------
 
-def hash_password(password: str):
+def hash_password(password: str)->str:
 
     return pwd_context.hash(password)
 
@@ -31,7 +31,7 @@ def hash_password(password: str):
 def verify_password(
     plain_password,
     hashed_password
-):
+)->bool:
 
     return pwd_context.verify(
         plain_password,
@@ -44,7 +44,7 @@ def verify_password(
 
 def create_access_token(
     data: dict
-):
+)->str:
 
     to_encode = data.copy()
 
@@ -72,7 +72,7 @@ def create_access_token(
 
 def decode_access_token(
     token: str
-):
+)->dict | None:
 
     try:
 

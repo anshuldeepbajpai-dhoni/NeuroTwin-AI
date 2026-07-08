@@ -30,12 +30,13 @@ def authenticate_user(
         return None
 
     token = create_access_token(
-        {
-            "sub": user.email,
-            "id": str(user.id)
-        }
+    {
+        "sub": user.email,
+        "id": str(user.id),
+        "role": user.role
+    }
     )
-
+    
     return {
         "access_token": token,
         "token_type": "bearer"

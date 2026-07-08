@@ -10,6 +10,8 @@ from backend.app.database.session import get_db
 from backend.app.models.user import User
 
 from backend.app.core.security import decode_access_token
+from fastapi import HTTPException
+from fastapi import status
 
 oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl="auth/login"
@@ -44,3 +46,13 @@ def get_current_user(
         )
 
     return user
+
+def require_admin(current_user=Depends(get_current_user)):
+
+    if current_user.role != "admin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin access required"
+        )
+
+    return current_user

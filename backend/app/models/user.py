@@ -5,6 +5,7 @@ from sqlalchemy import Column
 from sqlalchemy import DateTime
 from sqlalchemy import String
 from sqlalchemy.sql import func
+from sqlalchemy import String
 
 from backend.app.database.base import Base
 
@@ -35,6 +36,12 @@ class User(Base):
 
     password_hash = Column(
         String(255),
+        nullable=False
+    )
+
+    role = Column(
+        String(20),
+        default="user",
         nullable=False
     )
 

@@ -10,7 +10,7 @@ from backend.app.database.session import get_db
 from backend.app.dependencies.auth import get_current_user
 
 from backend.app.models.user import User
-
+from backend.app.dependencies.auth import require_admin
 from backend.app.schemas.user import (
     UserCreate,
     UserResponse
@@ -85,4 +85,13 @@ def get_me(
         "username": current_user.username,
         "email": current_user.email,
         "is_active": current_user.is_active
+    }
+
+@router.get("/admin")
+def admin_dashboard(
+    current_user: User = Depends(require_admin)
+):
+    return {
+        "message": "Welcome Admin",
+        "username": current_user.username
     }
