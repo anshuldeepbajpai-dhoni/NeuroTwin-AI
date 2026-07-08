@@ -1,6 +1,5 @@
 from fastapi import APIRouter
 from fastapi import Depends
-from fastapi import HTTPException
 from fastapi import status
 from fastapi.security import OAuth2PasswordRequestForm
 
@@ -8,9 +7,10 @@ from sqlalchemy.orm import Session
 
 from app.database.session import get_db
 from app.dependencies.auth import get_current_user
+from app.dependencies.auth import require_admin
 
 from app.models.user import User
-from app.dependencies.auth import require_admin
+
 from app.schemas.user import (
     UserCreate,
     UserResponse
@@ -39,14 +39,7 @@ def register(
     user: UserCreate,
     db: Session = Depends(get_db)
 ):
-    try:
-        return create_user(db, user)
-
-    except ValueError as e:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e)
-        )
+    return create_user(db, user)
 
 
 @router.post(
@@ -57,20 +50,11 @@ def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db)
 ):
-
-    token = authenticate_user(
+    return authenticate_user(
         db=db,
-        email=form_data.username,      # email goes here
+        email=form_data.username,
         password=form_data.password
     )
-
-    if token is None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid email or password"
-        )
-
-    return token
 
 
 @router.get(
@@ -86,6 +70,7 @@ def get_me(
         "email": current_user.email,
         "is_active": current_user.is_active
     }
+
 
 @router.get("/admin")
 def admin_dashboard(

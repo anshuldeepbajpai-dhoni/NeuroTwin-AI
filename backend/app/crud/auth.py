@@ -1,11 +1,11 @@
 from sqlalchemy.orm import Session
 
 from app.models.user import User
-
 from app.core.security import (
     verify_password,
-    create_access_token
+    create_access_token,
 )
+from app.exceptions import InvalidCredentialsException
 
 
 def authenticate_user(
@@ -21,20 +21,24 @@ def authenticate_user(
     )
 
     if not user:
-        return None
+        raise InvalidCredentialsException(
+            "Invalid email or password"
+        )
 
     if not verify_password(
         password,
         user.password_hash
     ):
-        return None
+        raise InvalidCredentialsException(
+            "Invalid email or password"
+        )
 
     token = create_access_token(
-    {
-        "sub": user.email,
-        "id": str(user.id),
-        "role": user.role
-    }
+        {
+            "sub": user.email,
+            "id": str(user.id),
+            "role": user.role
+        }
     )
 
     return {

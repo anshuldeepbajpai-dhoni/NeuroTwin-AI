@@ -21,6 +21,7 @@ from sqlalchemy.orm import Session
 from fastapi import Depends
 from fastapi import HTTPException
 from app.api.auth import router as auth_router
+from app.exceptions import register_exception_handlers
 
 # Log application startup
 logger.info("Starting NeuroTwin AI Backend...")
@@ -35,6 +36,7 @@ app = FastAPI(
 
 Base.metadata.create_all(bind=engine)
 app.include_router(auth_router)
+register_exception_handlers(app)
 
 # CORS Configuration
 origins = [
