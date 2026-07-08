@@ -6,11 +6,23 @@ from pydantic import BaseModel, ConfigDict, EmailStr
 class UserBase(BaseModel):
     username: str
     email: EmailStr
-
-
-class UserCreate(UserBase):
+    
+class UserCreate(BaseModel):
+    username: str
+    email: EmailStr
     password: str
     role: str = "user"
+
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "username": "anshul",
+                "email": "anshul@gmail.com",
+                "password": "Pass@123",
+                "role": "user"
+            }
+        }
+    )
 
 
 class UserLogin(BaseModel):

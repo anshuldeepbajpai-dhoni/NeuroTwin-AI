@@ -29,11 +29,13 @@ router = APIRouter(
     tags=["Authentication"]
 )
 
-
 @router.post(
     "/register",
     response_model=UserResponse,
-    status_code=status.HTTP_201_CREATED
+    status_code=status.HTTP_201_CREATED,
+    summary="Register User",
+    description="Create a new user account.",
+    response_description="User created successfully."
 )
 def register(
     user: UserCreate,
@@ -44,8 +46,12 @@ def register(
 
 @router.post(
     "/login",
-    response_model=Token
+    response_model=Token,
+    summary="User Login",
+    description="Authenticate user and return JWT access token.",
+    response_description="JWT access token."
 )
+
 def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db)
@@ -59,8 +65,11 @@ def login(
 
 @router.get(
     "/me",
-    response_model=CurrentUserResponse
-)
+    response_model=CurrentUserResponse,
+    summary="Current User",
+    description="Returns details of the authenticated user."
+) 
+
 def get_me(
     current_user: User = Depends(get_current_user)
 ):
@@ -72,7 +81,11 @@ def get_me(
     }
 
 
-@router.get("/admin")
+@router.get(
+    "/admin",
+    summary="Admin Dashboard",
+    description="Accessible only to users with the admin role."
+)
 def admin_dashboard(
     current_user: User = Depends(require_admin)
 ):

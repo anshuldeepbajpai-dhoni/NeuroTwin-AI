@@ -26,12 +26,48 @@ from app.exceptions import register_exception_handlers
 # Log application startup
 logger.info("Starting NeuroTwin AI Backend...")
 
+tags_metadata = [
+    {
+        "name": "Authentication",
+        "description": "Authentication APIs (Register, Login, JWT, RBAC)"
+    },
+    {
+        "name": "Users",
+        "description": "User management APIs"
+    }
+]
+
 app = FastAPI(
-    title=settings.app_name,
-    description=settings.app_description,
-    version=settings.app_version,
-    docs_url="/docs",
-    redoc_url="/redoc",
+    title="NeuroTwin AI Backend",
+    description="""
+## NeuroTwin AI Backend API
+
+Professional backend built with FastAPI.
+
+### Features
+
+- User Registration
+- JWT Authentication
+- Role-Based Access Control (RBAC)
+- PostgreSQL Database
+- SQLAlchemy ORM
+- Alembic Migrations
+- Global Exception Handling
+
+### Authentication
+
+Use **Authorize** button to login with JWT Bearer Token.
+""",
+    version="1.0.0",
+    contact={
+        "name": "Anshul Deep Bajpai",
+        "email": "anshul@gmail.com"
+    },
+    license_info={
+        "name": "MIT"
+    },
+
+    openapi_tags=tags_metadata
 )
 
 Base.metadata.create_all(bind=engine)
@@ -124,3 +160,4 @@ def tables():
             "users"
         ]
     }
+

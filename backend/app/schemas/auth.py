@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, ConfigDict, EmailStr
 from pydantic import BaseModel
 from pydantic import EmailStr
 
@@ -11,6 +11,15 @@ class LoginRequest(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
+
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "access_token": "eyJhbGciOiJIUzI1NiIs...",
+                "token_type": "bearer"
+            }
+        }
+    )
 
 
 class TokenData(BaseModel):
