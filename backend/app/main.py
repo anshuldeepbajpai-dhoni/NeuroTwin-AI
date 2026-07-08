@@ -13,6 +13,7 @@ from backend.app.database.database import engine
 from backend.app.schemas import UserCreate
 from backend.app.models import User
 from backend.app.api.users import router as user_router
+from backend.app.core.config import settings
 
 # Log application startup
 logger.info("Starting NeuroTwin AI Backend...")
@@ -121,4 +122,12 @@ def schema_test(user: UserCreate):
     return {
         "message": "Schema validation successful",
         "data": user
+    }
+
+@app.get("/jwt-config")
+def jwt_config():
+
+    return {
+        "algorithm": settings.algorithm,
+        "token_expiry": settings.access_token_expire_minutes
     }
