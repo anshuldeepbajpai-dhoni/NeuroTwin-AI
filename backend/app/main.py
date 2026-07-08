@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from backend.app.core.config import settings
 from backend.app.core.logger import logger
 from sqlalchemy import text
-
+from backend.app.schemas.auth import LoginRequest
 from backend.app.database.database import engine
 from backend.app.core.logger import logger
 from backend.app.core.security import create_access_token
@@ -143,4 +143,11 @@ def token_test():
 
     return {
         "token": token
+    }
+
+@app.post("/login-schema-test")
+def login_schema_test(data: LoginRequest):
+    return {
+        "message": "Schema works!",
+        "email": data.email
     }
