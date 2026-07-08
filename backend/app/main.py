@@ -14,6 +14,13 @@ from backend.app.schemas import UserCreate
 from backend.app.models import User
 from backend.app.api.users import router as user_router
 from backend.app.core.config import settings
+from backend.app.crud.auth import authenticate_user
+from backend.app.schemas.auth import LoginRequest
+from backend.app.database.session import get_db
+
+from sqlalchemy.orm import Session
+from fastapi import Depends
+from fastapi import HTTPException
 
 # Log application startup
 logger.info("Starting NeuroTwin AI Backend...")
@@ -151,3 +158,17 @@ def login_schema_test(data: LoginRequest):
         "message": "Schema works!",
         "email": data.email
     }
+
+
+@app.post("/login-test")
+def login_test(
+    login_data: LoginRequest,
+    db: Session = Depends(get_db)
+):
+    try:
+        return authenticate_user(db, login_data)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=401,
+            detail=str(e)
+        )
