@@ -6,7 +6,8 @@ from sqlalchemy import DateTime
 from sqlalchemy import String
 from sqlalchemy.sql import func
 from sqlalchemy import String
-
+from sqlalchemy import Text
+from sqlalchemy import Date
 from app.database.base import Base
 
 
@@ -37,6 +38,36 @@ class User(Base):
     password_hash = Column(
         String(255),
         nullable=False
+    )
+
+    phone = Column(
+    String(20),
+    nullable=True
+    )
+
+    bio = Column(
+        Text,
+        nullable=True
+    )
+
+    date_of_birth = Column(
+        Date,
+        nullable=True
+    )
+
+    avatar_url = Column(
+        String(255),
+        nullable=True
+    )
+
+    timezone = Column(
+        String(50),
+        default="UTC"
+    )
+
+    language = Column(
+        String(30),
+        default="English"
     )
 
     role = Column(

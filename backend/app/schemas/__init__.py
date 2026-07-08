@@ -13,3 +13,10 @@ from .auth import (
     TokenData,
     CurrentUser,
 )
+
+from .profile import (
+    ProfileResponse,
+    ProfileUpdate,
+    AvatarUpdate,
+    AvatarResponse,
+)
