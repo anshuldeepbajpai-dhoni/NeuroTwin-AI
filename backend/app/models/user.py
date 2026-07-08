@@ -7,7 +7,7 @@ from sqlalchemy import String
 from sqlalchemy.sql import func
 from sqlalchemy import String
 
-from backend.app.database.base import Base
+from app.database.base import Base
 
 
 class User(Base):
@@ -59,4 +59,9 @@ class User(Base):
         DateTime(timezone=True),
         onupdate=func.now(),
         server_default=func.now()
+    )
+
+    phone = Column(
+    String(20),
+    nullable=True
     )

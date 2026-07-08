@@ -6,23 +6,23 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 from sqlalchemy.orm import Session
 
-from backend.app.database.session import get_db
-from backend.app.dependencies.auth import get_current_user
+from app.database.session import get_db
+from app.dependencies.auth import get_current_user
 
-from backend.app.models.user import User
-from backend.app.dependencies.auth import require_admin
-from backend.app.schemas.user import (
+from app.models.user import User
+from app.dependencies.auth import require_admin
+from app.schemas.user import (
     UserCreate,
     UserResponse
 )
 
-from backend.app.schemas.auth import (
+from app.schemas.auth import (
     Token,
     CurrentUserResponse,
 )
 
-from backend.app.crud.user import create_user
-from backend.app.crud.auth import authenticate_user
+from app.crud.user import create_user
+from app.crud.auth import authenticate_user
 
 router = APIRouter(
     prefix="/auth",

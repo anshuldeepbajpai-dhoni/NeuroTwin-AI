@@ -1,26 +1,26 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.app.core.config import settings
-from backend.app.core.logger import logger
+from app.core.config import settings
+from app.core.logger import logger
 from sqlalchemy import text
-from backend.app.schemas.auth import LoginRequest
-from backend.app.database.database import engine
-from backend.app.core.logger import logger
-from backend.app.core.security import create_access_token
-from backend.app.database.base import Base
-from backend.app.database.database import engine
-from backend.app.schemas import UserCreate
-from backend.app.models import User
-from backend.app.core.config import settings
-from backend.app.crud.auth import authenticate_user
-from backend.app.schemas.auth import LoginRequest
-from backend.app.database.session import get_db
+from app.schemas.auth import LoginRequest
+from app.database.database import engine
+from app.core.logger import logger
+from app.core.security import create_access_token
+from app.database.base import Base
+from app.database.database import engine
+from app.schemas import UserCreate
+from app.models import User
+from app.core.config import settings
+from app.crud.auth import authenticate_user
+from app.schemas.auth import LoginRequest
+from app.database.session import get_db
 
 from sqlalchemy.orm import Session
 from fastapi import Depends
 from fastapi import HTTPException
-from backend.app.api.auth import router as auth_router
+from app.api.auth import router as auth_router
 
 # Log application startup
 logger.info("Starting NeuroTwin AI Backend...")

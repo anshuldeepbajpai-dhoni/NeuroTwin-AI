@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 
-from backend.app.models.user import User
+from app.models.user import User
 
-from backend.app.core.security import (
+from app.core.security import (
     verify_password,
     create_access_token
 )
@@ -36,7 +36,7 @@ def authenticate_user(
         "role": user.role
     }
     )
-    
+
     return {
         "access_token": token,
         "token_type": "bearer"
