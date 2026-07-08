@@ -12,6 +12,7 @@ from backend.app.database.base import Base
 from backend.app.database.database import engine
 from backend.app.schemas import UserCreate
 from backend.app.models import User
+from backend.app.api.users import router as user_router
 
 # Log application startup
 logger.info("Starting NeuroTwin AI Backend...")
@@ -23,6 +24,7 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
 )
+app.include_router(user_router)
 Base.metadata.create_all(bind=engine)
 
 # CORS Configuration
