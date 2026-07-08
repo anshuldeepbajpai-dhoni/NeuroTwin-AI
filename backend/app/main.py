@@ -8,6 +8,11 @@ from sqlalchemy import text
 from backend.app.database.database import engine
 from backend.app.core.logger import logger
 
+from backend.app.database.base import Base
+from backend.app.database.database import engine
+
+from backend.app.models import User
+
 # Log application startup
 logger.info("Starting NeuroTwin AI Backend...")
 
@@ -18,6 +23,7 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
 )
+Base.metadata.create_all(bind=engine)
 
 # CORS Configuration
 origins = [
@@ -96,3 +102,12 @@ def error():
         return {
             "error": str(e)
         }
+    
+@app.get("/tables")
+def tables():
+
+    return {
+        "tables": [
+            "users"
+        ]
+    }
