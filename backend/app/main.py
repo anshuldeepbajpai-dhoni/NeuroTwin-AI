@@ -7,7 +7,7 @@ from sqlalchemy import text
 
 from backend.app.database.database import engine
 from backend.app.core.logger import logger
-
+from backend.app.core.security import create_access_token
 from backend.app.database.base import Base
 from backend.app.database.database import engine
 from backend.app.schemas import UserCreate
@@ -130,4 +130,17 @@ def jwt_config():
     return {
         "algorithm": settings.algorithm,
         "token_expiry": settings.access_token_expire_minutes
+    }
+
+@app.get("/token-test")
+def token_test():
+
+    token = create_access_token(
+        {
+            "sub": "anshul@gmail.com"
+        }
+    )
+
+    return {
+        "token": token
     }
