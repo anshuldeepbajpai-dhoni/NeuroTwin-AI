@@ -26,3 +26,9 @@ from .digital_twin import (
     DigitalTwinUpdate,
     DigitalTwinResponse,
 )
+
+from .memory import (
+    MemoryCreate,
+    MemoryUpdate,
+    MemoryResponse,
+)

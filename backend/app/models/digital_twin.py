@@ -68,3 +68,9 @@ class DigitalTwin(Base):
         "User",
         back_populates="digital_twin"
     )
+
+    memories = relationship(
+    "Memory",
+    back_populates="digital_twin",
+    cascade="all, delete-orphan"
+    )

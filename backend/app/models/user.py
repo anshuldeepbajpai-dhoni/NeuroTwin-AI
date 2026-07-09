@@ -5,7 +5,6 @@ from sqlalchemy import Column
 from sqlalchemy import DateTime
 from sqlalchemy import String
 from sqlalchemy.sql import func
-from sqlalchemy import String
 from sqlalchemy import Text
 from sqlalchemy import Date
 from app.database.base import Base
@@ -93,14 +92,15 @@ class User(Base):
         server_default=func.now()
     )
 
-    phone = Column(
-    String(20),
-    nullable=True
-    )
-
     digital_twin = relationship(
     "DigitalTwin",
     back_populates="user",
     uselist=False,
     cascade="all, delete"
+    )
+
+    memories = relationship(
+    "Memory",
+    back_populates="user",
+    cascade="all, delete-orphan"
     )
