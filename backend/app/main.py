@@ -23,6 +23,8 @@ from fastapi import HTTPException
 from app.api.auth import router as auth_router
 from app.exceptions import register_exception_handlers
 from app.api.profile import router as profile_router
+from fastapi.staticfiles import StaticFiles
+import os
 
 # Log application startup
 logger.info("Starting NeuroTwin AI Backend...")
@@ -91,6 +93,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+os.makedirs("uploads/avatars", exist_ok=True)
+
+app.mount(
+    "/uploads",
+    StaticFiles(directory="uploads"),
+    name="uploads"
+)
 
 @app.get("/", tags=["Home"])
 def root():

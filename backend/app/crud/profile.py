@@ -5,6 +5,11 @@ from app.schemas.profile import (
     ProfileUpdate,
     AvatarUpdate,
 )
+import os
+import shutil
+from uuid import uuid4
+
+from fastapi import UploadFile
 
 def get_profile(
     db: Session,
@@ -47,7 +52,7 @@ def update_profile(
 def update_avatar(
     db: Session,
     current_user: User,
-    avatar: AvatarUpdate
+    avatar: UploadFile
 ):
 
     user = (
@@ -56,13 +61,29 @@ def update_avatar(
         .first()
     )
 
-    user.avatar_url = str(avatar.avatar_url)
+    extension = avatar.filename.split(".")[-1]
+
+    filename = f"{uuid4()}.{extension}"
+
+    filepath = os.path.join(
+        "uploads",
+        "avatars",
+        filename
+    )
+
+    with open(filepath, "wb") as buffer:
+        shutil.copyfileobj(
+            avatar.file,
+            buffer
+        )
+
+    user.avatar_url = f"/uploads/avatars/{filename}"
 
     db.commit()
     db.refresh(user)
 
     return {
-        "message": "Avatar updated successfully",
+        "message": "Avatar uploaded successfully",
         "avatar_url": user.avatar_url
     }
 

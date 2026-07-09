@@ -1,9 +1,9 @@
-from tests.conftest import client
-
-
-def test_root():
+def test_root(client):
 
     response = client.get("/")
 
     assert response.status_code == 200
-    assert response.json()["status"] == "Running"
+
+    data = response.json()
+
+    assert data["status"] == "Running"

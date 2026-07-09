@@ -3,7 +3,7 @@ import uuid
 from tests.conftest import client
 
 
-def test_register():
+def test_register(client):
 
     unique = str(uuid.uuid4())[:8]
 
@@ -19,7 +19,7 @@ def test_register():
 
     assert response.status_code in [200, 201]
 
-def test_login():
+def test_login(client):
 
     unique = str(uuid.uuid4())[:8]
 

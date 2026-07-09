@@ -21,6 +21,8 @@ from app.crud.profile import (
     update_avatar,
     delete_avatar,
 )
+from fastapi import UploadFile
+from fastapi import File
 
 router = APIRouter(
     prefix="/users",
@@ -61,12 +63,10 @@ def update(
 
 @router.patch(
     "/profile/avatar",
-    response_model=AvatarResponse,
-    summary="Update Avatar",
-    description="Update the avatar URL of the authenticated user."
+    response_model=AvatarResponse
 )
 def avatar(
-    avatar: AvatarUpdate,
+    avatar: UploadFile = File(...),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
