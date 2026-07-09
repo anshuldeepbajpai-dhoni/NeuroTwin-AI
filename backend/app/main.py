@@ -41,37 +41,46 @@ tags_metadata = [
 ]
 
 app = FastAPI(
-    title="NeuroTwin AI Backend",
+    title="NeuroTwin AI Backend API",
+    version="1.0.0",
+    summary="Enterprise-grade backend for NeuroTwin AI.",
     description="""
-## NeuroTwin AI Backend API
+# NeuroTwin AI Backend
 
-Professional backend built with FastAPI.
+A production-ready backend built using **FastAPI**.
 
-### Features
+## Features
 
-- User Registration
 - JWT Authentication
 - Role-Based Access Control (RBAC)
+- User Profile Management
+- Avatar Upload
 - PostgreSQL Database
 - SQLAlchemy ORM
 - Alembic Migrations
-- Global Exception Handling
+- Swagger Documentation
+- Pytest Testing
 
-### Authentication
+## Authentication
 
-Use **Authorize** button to login with JWT Bearer Token.
+Use **Authorize** to log in using your email and password.
+
+All protected endpoints require a valid JWT token.
+
+## Developer
+
+**Anshul Deep Bajpai**
 """,
-    version="1.0.0",
     contact={
         "name": "Anshul Deep Bajpai",
-        "email": "anshul@gmail.com"
+        "email": "anshul@gmail.com",
     },
     license_info={
-        "name": "MIT"
+        "name": "MIT",
     },
-
-    openapi_tags=tags_metadata
+    openapi_tags=tags_metadata,
 )
+
 
 Base.metadata.create_all(bind=engine)
 app.include_router(auth_router)
@@ -101,7 +110,12 @@ app.mount(
     name="uploads"
 )
 
-@app.get("/", tags=["Home"])
+@app.get(
+    "/",
+    tags=["Home"],
+    summary="API Home",
+    description="Returns basic information about the NeuroTwin AI Backend."
+)
 def root():
     logger.info("Root endpoint accessed")
 
@@ -114,7 +128,12 @@ def root():
     }
 
 
-@app.get("/health", tags=["Health"])
+@app.get(
+    "/health",
+    tags=["Health"],
+    summary="Health Check",
+    description="Checks whether the backend service is running correctly."
+)
 def health():
     logger.info("Health endpoint accessed")
 
@@ -124,7 +143,12 @@ def health():
     }
 
 
-@app.get("/version", tags=["Version"])
+@app.get(
+    "/version",
+    tags=["Version"],
+    summary="Application Version",
+    description="Returns the current backend version."
+)
 def version():
     logger.info("Version endpoint accessed")
 
@@ -133,7 +157,10 @@ def version():
         "version": settings.app_version
     }
 
-@app.get("/db-check")
+@app.get(
+    "/db-check",
+    include_in_schema=False
+)
 def database_check():
     try:
         with engine.connect() as connection:
@@ -154,7 +181,10 @@ def database_check():
             "error": str(e)
         }
 
-@app.get("/error")
+@app.get(
+    "/error",
+    include_in_schema=False
+)
 def error():
     try:
         x = 10 / 0
@@ -164,7 +194,10 @@ def error():
             "error": str(e)
         }
     
-@app.get("/tables")
+@app.get(
+    "/tables",
+    include_in_schema=False
+)
 def tables():
 
     return {

@@ -29,14 +29,28 @@ router = APIRouter(
     tags=["Authentication"]
 )
 
+# @router.post(
+#     "/register",
+#     response_model=UserResponse,
+#     status_code=status.HTTP_201_CREATED,
+#     summary="Register User",
+#     description="Create a new user account.",
+#     response_description="User created successfully."
+# )
+
 @router.post(
     "/register",
     response_model=UserResponse,
     status_code=status.HTTP_201_CREATED,
-    summary="Register User",
-    description="Create a new user account.",
-    response_description="User created successfully."
+    summary="Register New User",
+    description="Creates a new user account.",
+    responses={
+        201: {"description": "User registered successfully"},
+        400: {"description": "Username or email already exists"},
+    },
 )
+
+
 def register(
     user: UserCreate,
     db: Session = Depends(get_db)
@@ -44,12 +58,23 @@ def register(
     return create_user(db, user)
 
 
+# @router.post(
+#     "/login",
+#     response_model=Token,
+#     summary="User Login",
+#     description="Authenticate user and return JWT access token.",
+#     response_description="JWT access token."
+# )
+
 @router.post(
     "/login",
     response_model=Token,
     summary="User Login",
-    description="Authenticate user and return JWT access token.",
-    response_description="JWT access token."
+    description="Authenticate user and generate JWT access token.",
+    responses={
+        200: {"description": "Login successful"},
+        401: {"description": "Invalid email or password"},
+    },
 )
 
 def login(

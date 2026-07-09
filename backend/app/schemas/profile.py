@@ -60,7 +60,7 @@ class ProfileUpdate(BaseModel):
         json_schema_extra={
             "example": {
                 "phone": "+919876543210",
-                "bio": "AI Engineer",
+                "bio": "AI Engineer specializing in machine learning and deep learning.",
                 "date_of_birth": "2003-05-15",
                 "timezone": "Asia/Kolkata",
                 "language": "English"

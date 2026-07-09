@@ -49,10 +49,32 @@ def profile(
     summary="Update User Profile",
     description="Update the profile information of the authenticated user."
 )
+
+@router.patch(
+    "/profile/avatar",
+    response_model=AvatarResponse,
+    summary="Upload Profile Avatar",
+    description="Upload or replace the authenticated user's profile picture."
+)
+def avatar(
+    avatar: UploadFile = File(...),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+    summary="Upload Avatar",
+    description="Upload a profile picture for the authenticated user."
+):
+    return update_avatar(
+        db,
+        current_user,
+        avatar
+    )
+
 def update(
     profile: ProfileUpdate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
+    summary="Update Profile",
+    description="Update profile information such as phone, bio, timezone, and language."
 ):
     return update_profile(
         db,
@@ -60,21 +82,6 @@ def update(
         profile
     )
 
-
-@router.patch(
-    "/profile/avatar",
-    response_model=AvatarResponse
-)
-def avatar(
-    avatar: UploadFile = File(...),
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
-):
-    return update_avatar(
-        db,
-        current_user,
-        avatar
-    )
 
 
 @router.delete(
