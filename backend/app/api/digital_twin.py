@@ -34,14 +34,25 @@ router = APIRouter(
     tags=["Digital Twin"]
 )
 
-
 @router.post(
     "/",
     response_model=DigitalTwinResponse,
     status_code=status.HTTP_201_CREATED,
     summary="Create Digital Twin",
-    description="Create a Digital Twin for the authenticated user."
+    description="Create a Digital Twin for the authenticated user.",
+    responses={
+        201: {
+            "description": "Digital Twin created successfully."
+        },
+        401: {
+            "description": "User is not authenticated."
+        },
+        409: {
+            "description": "Digital Twin already exists."
+        }
+    }
 )
+
 def create_twin(
     twin: DigitalTwinCreate,
     db: Session = Depends(get_db),
@@ -60,13 +71,24 @@ def create_twin(
             detail=str(e)
         )
 
-
 @router.get(
     "/",
     response_model=DigitalTwinResponse,
     summary="Get Digital Twin",
-    description="Retrieve the authenticated user's Digital Twin."
+    description="Retrieve the authenticated user's Digital Twin.",
+    responses={
+        200: {
+            "description": "Digital Twin retrieved successfully."
+        },
+        401: {
+            "description": "User is not authenticated."
+        },
+        404: {
+            "description": "Digital Twin not found."
+        }
+    }
 )
+
 def get_twin(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
@@ -88,8 +110,23 @@ def get_twin(
     "/",
     response_model=DigitalTwinResponse,
     summary="Update Digital Twin",
-    description="Update the authenticated user's Digital Twin."
+    description="Update the authenticated user's Digital Twin.",
+    responses={
+        200: {
+            "description": "Digital Twin updated successfully."
+        },
+        400: {
+            "description": "No fields provided for update."
+        },
+        401: {
+            "description": "User is not authenticated."
+        },
+        404: {
+            "description": "Digital Twin not found."
+        }
+    }
 )
+
 def update_twin(
     twin: DigitalTwinUpdate,
     db: Session = Depends(get_db),
@@ -118,8 +155,20 @@ def update_twin(
 @router.delete(
     "/",
     summary="Delete Digital Twin",
-    description="Delete the authenticated user's Digital Twin."
+    description="Delete the authenticated user's Digital Twin.",
+    responses={
+        200: {
+            "description": "Digital Twin deleted successfully."
+        },
+        401: {
+            "description": "User is not authenticated."
+        },
+        404: {
+            "description": "Digital Twin not found."
+        }
+    }
 )
+
 def delete_twin(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)

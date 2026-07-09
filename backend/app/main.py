@@ -1,31 +1,49 @@
+# ======================================================
+# Standard Library
+# ======================================================
+
+import os
+
+
+# ======================================================
+# Third-Party Libraries
+# ======================================================
+
+from fastapi import Depends
 from fastapi import FastAPI
+from fastapi import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+
+from sqlalchemy import text
+from sqlalchemy.orm import Session
+
+
+# ======================================================
+# Local Application Imports
+# ======================================================
+
+from app.api.auth import router as auth_router
+from app.api.digital_twin import router as digital_twin_router
+from app.api.profile import router as profile_router
 
 from app.core.config import settings
-from app.core.logger import logger
-from sqlalchemy import text
-from app.schemas.auth import LoginRequest
-from app.database.database import engine
 from app.core.logger import logger
 from app.core.security import create_access_token
+
+from app.crud.auth import authenticate_user
+
 from app.database.base import Base
 from app.database.database import engine
-from app.schemas import UserCreate
-from app.models import User
-from app.core.config import settings
-from app.crud.auth import authenticate_user
-from app.schemas.auth import LoginRequest
 from app.database.session import get_db
 
-from sqlalchemy.orm import Session
-from fastapi import Depends
-from fastapi import HTTPException
-from app.api.auth import router as auth_router
 from app.exceptions import register_exception_handlers
-from app.api.profile import router as profile_router
-from fastapi.staticfiles import StaticFiles
-import os
-from app.api.digital_twin import router as digital_twin_router
+
+from app.models import User
+
+from app.schemas import UserCreate
+from app.schemas.auth import LoginRequest
+
 
 # Log application startup
 logger.info("Starting NeuroTwin AI Backend...")
