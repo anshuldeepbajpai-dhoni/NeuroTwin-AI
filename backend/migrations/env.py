@@ -19,6 +19,7 @@ from app.database.base import Base
 
 # Import all models here
 from app.models.user import User
+from app.models.digital_twin import DigitalTwin
 
 # Alembic Config object
 config = context.config

@@ -6,3 +6,9 @@ from .custom_exceptions import (
     ForbiddenException,
     NotFoundException,
 )
+
+from .digital_twin import (
+    DigitalTwinAlreadyExistsException,
+    DigitalTwinNotFoundException,
+    EmptyUpdateException,
+)

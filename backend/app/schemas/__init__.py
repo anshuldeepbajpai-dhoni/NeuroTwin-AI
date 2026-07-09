@@ -20,3 +20,9 @@ from .profile import (
     AvatarUpdate,
     AvatarResponse,
 )
+
+from .digital_twin import (
+    DigitalTwinCreate,
+    DigitalTwinUpdate,
+    DigitalTwinResponse,
+)

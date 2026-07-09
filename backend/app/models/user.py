@@ -9,6 +9,7 @@ from sqlalchemy import String
 from sqlalchemy import Text
 from sqlalchemy import Date
 from app.database.base import Base
+from sqlalchemy.orm import relationship
 
 
 class User(Base):
@@ -95,4 +96,11 @@ class User(Base):
     phone = Column(
     String(20),
     nullable=True
+    )
+
+    digital_twin = relationship(
+    "DigitalTwin",
+    back_populates="user",
+    uselist=False,
+    cascade="all, delete"
     )

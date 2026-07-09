@@ -25,6 +25,7 @@ from app.exceptions import register_exception_handlers
 from app.api.profile import router as profile_router
 from fastapi.staticfiles import StaticFiles
 import os
+from app.api.digital_twin import router as digital_twin_router
 
 # Log application startup
 logger.info("Starting NeuroTwin AI Backend...")
@@ -87,6 +88,7 @@ app.include_router(auth_router)
 register_exception_handlers(app)
 app.include_router(auth_router)
 app.include_router(profile_router)
+app.include_router(digital_twin_router)
 
 # CORS Configuration
 origins = [

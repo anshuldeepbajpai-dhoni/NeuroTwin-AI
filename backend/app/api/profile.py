@@ -1,5 +1,7 @@
 from fastapi import APIRouter
 from fastapi import Depends
+from fastapi import UploadFile
+from fastapi import File
 
 from sqlalchemy.orm import Session
 
@@ -11,7 +13,6 @@ from app.models.user import User
 from app.schemas.profile import (
     ProfileResponse,
     ProfileUpdate,
-    AvatarUpdate,
     AvatarResponse,
 )
 
@@ -21,8 +22,6 @@ from app.crud.profile import (
     update_avatar,
     delete_avatar,
 )
-from fastapi import UploadFile
-from fastapi import File
 
 router = APIRouter(
     prefix="/users",
@@ -40,7 +39,10 @@ def profile(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    return get_profile(db, current_user)
+    return get_profile(
+        db,
+        current_user
+    )
 
 
 @router.put(
@@ -49,6 +51,17 @@ def profile(
     summary="Update User Profile",
     description="Update the profile information of the authenticated user."
 )
+def update(
+    profile: ProfileUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    return update_profile(
+        db,
+        current_user,
+        profile
+    )
+
 
 @router.patch(
     "/profile/avatar",
@@ -59,29 +72,13 @@ def profile(
 def avatar(
     avatar: UploadFile = File(...),
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
-    summary="Upload Avatar",
-    description="Upload a profile picture for the authenticated user."
+    current_user: User = Depends(get_current_user)
 ):
     return update_avatar(
         db,
         current_user,
         avatar
     )
-
-def update(
-    profile: ProfileUpdate,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
-    summary="Update Profile",
-    description="Update profile information such as phone, bio, timezone, and language."
-):
-    return update_profile(
-        db,
-        current_user,
-        profile
-    )
-
 
 
 @router.delete(
