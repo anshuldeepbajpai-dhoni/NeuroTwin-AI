@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import List
 from typing import Optional
 
 from pydantic import BaseModel
@@ -115,4 +116,61 @@ class MemoryResponse(MemoryBase):
     model_config = ConfigDict(
         from_attributes=True,
         title="Memory Response"
+    )
+
+class PaginatedMemoryResponse(BaseModel):
+
+    items: List[MemoryResponse]
+
+    total: int = Field(
+        ge=0,
+        description="Total number of memories matching the filters."
+    )
+
+    page: int = Field(
+        ge=1,
+        description="Current page number."
+    )
+
+    page_size: int = Field(
+        ge=1,
+        description="Maximum number of memories per page."
+    )
+
+    total_pages: int = Field(
+        ge=0,
+        description="Total number of available pages."
+    )
+
+    model_config = ConfigDict(
+        title="Paginated Memory Response",
+        json_schema_extra={
+            "example": {
+                "items": [
+                    {
+                        "id": "memory-id",
+                        "user_id": "user-id",
+                        "digital_twin_id": "digital-twin-id",
+                        "title": "Python Development",
+                        "content": (
+                            "The user enjoys building APIs "
+                            "with Python and FastAPI."
+                        ),
+                        "category": "Programming",
+                        "importance": 5,
+                        "is_favorite": True,
+                        "created_at": (
+                            "2026-07-10T10:00:00+00:00"
+                        ),
+                        "updated_at": (
+                            "2026-07-10T10:00:00+00:00"
+                        )
+                    }
+                ],
+                "total": 1,
+                "page": 1,
+                "page_size": 10,
+                "total_pages": 1
+            }
+        }
     )

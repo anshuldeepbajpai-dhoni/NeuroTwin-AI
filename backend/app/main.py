@@ -26,6 +26,7 @@ from sqlalchemy.orm import Session
 from app.api.auth import router as auth_router
 from app.api.digital_twin import router as digital_twin_router
 from app.api.profile import router as profile_router
+from app.api.memory import router as memory_router
 
 from app.core.config import settings
 from app.core.logger import logger
@@ -107,6 +108,7 @@ register_exception_handlers(app)
 app.include_router(auth_router)
 app.include_router(profile_router)
 app.include_router(digital_twin_router)
+app.include_router(memory_router)
 
 # CORS Configuration
 origins = [

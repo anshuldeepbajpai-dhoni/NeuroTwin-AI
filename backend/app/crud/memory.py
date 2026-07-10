@@ -1,18 +1,26 @@
+from typing import Optional
+
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
-from app.models.user import User
-from app.models.memory import Memory
+from app.exceptions import (
+    DigitalTwinNotFoundException,
+    EmptyMemoryUpdateException,
+    MemoryNotFoundException,
+)
 from app.models.digital_twin import DigitalTwin
-
+from app.models.memory import Memory
+from app.models.user import User
 from app.schemas.memory import (
     MemoryCreate,
     MemoryUpdate,
 )
 
+
 def create_memory(
     db: Session,
     current_user: User,
-    memory: MemoryCreate
+    memory: MemoryCreate,
 ):
     twin = (
         db.query(DigitalTwin)
@@ -23,7 +31,7 @@ def create_memory(
     )
 
     if not twin:
-        raise ValueError(
+        raise DigitalTwinNotFoundException(
             "Digital Twin not found."
         )
 
@@ -34,7 +42,7 @@ def create_memory(
         content=memory.content,
         category=memory.category,
         importance=memory.importance,
-        is_favorite=memory.is_favorite
+        is_favorite=memory.is_favorite,
     )
 
     db.add(new_memory)
@@ -43,60 +51,139 @@ def create_memory(
 
     return new_memory
 
-
 def get_memories(
     db: Session,
-    current_user: User
+    current_user: User,
+    search: Optional[str] = None,
+    category: Optional[str] = None,
+    importance: Optional[int] = None,
+    is_favorite: Optional[bool] = None,
+    page: int = 1,
+    page_size: int = 10,
+    sort_by: str = "created_at",
+    sort_order: str = "desc",
 ):
-    return (
+    query = (
         db.query(Memory)
         .filter(
             Memory.user_id == current_user.id
         )
-        .order_by(
-            Memory.created_at.desc()
+    )
+
+    if search:
+        search_value = f"%{search.strip()}%"
+
+        query = query.filter(
+            or_(
+                Memory.title.ilike(search_value),
+                Memory.content.ilike(search_value),
+            )
         )
+
+    if category:
+        query = query.filter(
+            Memory.category.ilike(
+                category.strip()
+            )
+        )
+
+    if importance is not None:
+        query = query.filter(
+            Memory.importance == importance
+        )
+
+    if is_favorite is not None:
+        query = query.filter(
+            Memory.is_favorite == is_favorite
+        )
+
+    total = query.count()
+
+    sort_columns = {
+        "created_at": Memory.created_at,
+        "updated_at": Memory.updated_at,
+        "title": Memory.title,
+        "category": Memory.category,
+        "importance": Memory.importance,
+    }
+
+    sort_column = sort_columns.get(
+        sort_by,
+        Memory.created_at,
+    )
+
+    if sort_order == "asc":
+        query = query.order_by(
+            sort_column.asc()
+        )
+
+    else:
+        query = query.order_by(
+            sort_column.desc()
+        )
+
+    offset = (
+        page - 1
+    ) * page_size
+
+    items = (
+        query
+        .offset(offset)
+        .limit(page_size)
         .all()
     )
+
+    total_pages = (
+        total + page_size - 1
+    ) // page_size
+
+    return {
+        "items": items,
+        "total": total,
+        "page": page,
+        "page_size": page_size,
+        "total_pages": total_pages,
+    }
 
 def get_memory(
     db: Session,
     current_user: User,
-    memory_id: str
+    memory_id: str,
 ):
     memory = (
         db.query(Memory)
         .filter(
             Memory.id == memory_id,
-            Memory.user_id == current_user.id
+            Memory.user_id == current_user.id,
         )
         .first()
     )
 
     if not memory:
-        raise ValueError(
+        raise MemoryNotFoundException(
             "Memory not found."
         )
 
     return memory
 
+
 def update_memory(
     db: Session,
     current_user: User,
     memory_id: str,
-    memory_update: MemoryUpdate
+    memory_update: MemoryUpdate,
 ):
     memory = (
         db.query(Memory)
         .filter(
             Memory.id == memory_id,
-            Memory.user_id == current_user.id
+            Memory.user_id == current_user.id,
         )
         .first()
     )
 
     if not memory:
-        raise ValueError(
+        raise MemoryNotFoundException(
             "Memory not found."
         )
 
@@ -105,7 +192,7 @@ def update_memory(
     )
 
     if not update_data:
-        raise ValueError(
+        raise EmptyMemoryUpdateException(
             "No fields provided for update."
         )
 
@@ -113,7 +200,7 @@ def update_memory(
         setattr(
             memory,
             key,
-            value
+            value,
         )
 
     db.commit()
@@ -121,22 +208,23 @@ def update_memory(
 
     return memory
 
+
 def delete_memory(
     db: Session,
     current_user: User,
-    memory_id: str
+    memory_id: str,
 ):
     memory = (
         db.query(Memory)
         .filter(
             Memory.id == memory_id,
-            Memory.user_id == current_user.id
+            Memory.user_id == current_user.id,
         )
         .first()
     )
 
     if not memory:
-        raise ValueError(
+        raise MemoryNotFoundException(
             "Memory not found."
         )
 

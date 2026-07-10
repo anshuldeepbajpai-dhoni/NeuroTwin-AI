@@ -12,3 +12,8 @@ from .digital_twin import (
     DigitalTwinNotFoundException,
     EmptyUpdateException,
 )
+
+from .custom_exceptions import (
+    EmptyMemoryUpdateException,
+    MemoryNotFoundException,
+)

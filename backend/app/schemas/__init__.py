@@ -31,4 +31,5 @@ from .memory import (
     MemoryCreate,
     MemoryUpdate,
     MemoryResponse,
+    PaginatedMemoryResponse,
 )
