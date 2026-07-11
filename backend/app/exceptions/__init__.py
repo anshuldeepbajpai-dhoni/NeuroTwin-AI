@@ -27,3 +27,13 @@ from .message import (
     InvalidMessageRoleException,
     MessageNotFoundException,
 )
+
+from .ai import (
+    AIAuthenticationException,
+    AIConfigurationException,
+    AIConnectionException,
+    AIQuotaExceededException,
+    AIRateLimitException,
+    AIResponseException,
+    AITimeoutException,
+)

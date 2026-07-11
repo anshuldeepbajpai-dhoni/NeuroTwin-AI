@@ -19,6 +19,16 @@ from app.exceptions.message import (
     MessageNotFoundException,
 )
 
+from app.exceptions.ai import (
+    AIAuthenticationException,
+    AIConfigurationException,
+    AIConnectionException,
+    AIQuotaExceededException,
+    AIRateLimitException,
+    AIResponseException,
+    AITimeoutException,
+)
+
 
 async def conversation_not_found_handler(
     request,
@@ -61,6 +71,89 @@ async def invalid_message_role_handler(
 ):
     return JSONResponse(
         status_code=403,
+        content={
+            "detail": exc.message
+        },
+    )
+
+async def ai_configuration_handler(
+    request,
+    exc: AIConfigurationException,
+):
+    return JSONResponse(
+        status_code=503,
+        content={
+            "detail": exc.message
+        },
+    )
+
+
+async def ai_authentication_handler(
+    request,
+    exc: AIAuthenticationException,
+):
+    return JSONResponse(
+        status_code=502,
+        content={
+            "detail": exc.message
+        },
+    )
+
+
+async def ai_quota_exceeded_handler(
+    request,
+    exc: AIQuotaExceededException,
+):
+    return JSONResponse(
+        status_code=503,
+        content={
+            "detail": exc.message
+        },
+    )
+
+
+async def ai_rate_limit_handler(
+    request,
+    exc: AIRateLimitException,
+):
+    return JSONResponse(
+        status_code=429,
+        content={
+            "detail": exc.message
+        },
+    )
+
+
+async def ai_timeout_handler(
+    request,
+    exc: AITimeoutException,
+):
+    return JSONResponse(
+        status_code=504,
+        content={
+            "detail": exc.message
+        },
+    )
+
+
+async def ai_connection_handler(
+    request,
+    exc: AIConnectionException,
+):
+    return JSONResponse(
+        status_code=503,
+        content={
+            "detail": exc.message
+        },
+    )
+
+
+async def ai_response_handler(
+    request,
+    exc: AIResponseException,
+):
+    return JSONResponse(
+        status_code=502,
         content={
             "detail": exc.message
         },
@@ -165,4 +258,39 @@ def register_exception_handlers(app: FastAPI):
     app.add_exception_handler(
         InvalidMessageRoleException,
         invalid_message_role_handler,
+    )
+
+    app.add_exception_handler(
+        AIConfigurationException,
+        ai_configuration_handler,
+    )
+
+    app.add_exception_handler(
+        AIAuthenticationException,
+        ai_authentication_handler,
+    )
+
+    app.add_exception_handler(
+        AIQuotaExceededException,
+        ai_quota_exceeded_handler,
+    )
+
+    app.add_exception_handler(
+        AIRateLimitException,
+        ai_rate_limit_handler,
+    )
+
+    app.add_exception_handler(
+        AITimeoutException,
+        ai_timeout_handler,
+    )
+
+    app.add_exception_handler(
+        AIConnectionException,
+        ai_connection_handler,
+    )
+
+    app.add_exception_handler(
+        AIResponseException,
+        ai_response_handler,
     )
