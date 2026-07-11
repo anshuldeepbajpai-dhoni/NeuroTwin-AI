@@ -14,3 +14,21 @@ from .digital_twin import (
     update_digital_twin,
     delete_digital_twin,
 )
+
+from .conversation import (
+    create_conversation,
+    delete_conversation,
+    get_conversation_by_id,
+    get_conversations,
+    get_user_digital_twin,
+    update_conversation,
+)
+
+from .message import (
+    create_internal_message,
+    create_message,
+    delete_message,
+    get_message_by_id,
+    get_messages,
+    get_owned_conversation,
+)

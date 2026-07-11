@@ -44,7 +44,12 @@ from app.models import User
 
 from app.schemas import UserCreate
 from app.schemas.auth import LoginRequest
-
+from app.api.conversation import (
+    router as conversation_router,
+)
+from app.api.message import (
+    router as message_router,
+)
 
 # Log application startup
 logger.info("Starting NeuroTwin AI Backend...")
@@ -109,6 +114,12 @@ app.include_router(auth_router)
 app.include_router(profile_router)
 app.include_router(digital_twin_router)
 app.include_router(memory_router)
+app.include_router(
+    conversation_router
+)
+app.include_router(
+    message_router
+)
 
 # CORS Configuration
 origins = [

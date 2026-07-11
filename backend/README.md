@@ -1057,6 +1057,67 @@ NeuroTwin AI currently provides a secure and modular backend foundation with:
 
 The next major development stage is:
 
+## Phase 2.4 – Conversation and Messaging System
+
+Phase 2.4 introduces the core conversation infrastructure for NeuroTwin AI. Authenticated users can create and manage conversations associated with their Digital Twin and store structured user messages inside those conversations.
+
+### Features Implemented
+
+#### Conversation Management
+
+- Create new conversations
+- Retrieve a conversation by ID
+- Retrieve all user-owned conversations
+- Update conversation titles
+- Archive and unarchive conversations
+- Delete conversations
+- Search conversations by title
+- Filter conversations by archive status
+- Sort conversations by:
+  - Creation date
+  - Update date
+  - Title
+- Paginated conversation results
+- User ownership validation
+- JWT-protected endpoints
+
+#### Message Management
+
+- Create user messages inside conversations
+- Retrieve conversation message history
+- Retrieve individual messages
+- Delete messages
+- Filter messages by role
+- Sort messages chronologically
+- Paginated message history
+- Conversation ownership validation
+- Message ownership validation
+- JWT-protected endpoints
+
+#### Message Role Security
+
+Public API users can create only:
+
+- `user` messages
+
+The following roles are protected for future internal AI services:
+
+- `assistant`
+- `system`
+
+This prevents clients from impersonating the NeuroTwin AI assistant or injecting system messages.
+
+### Database Tables
+
+Phase 2.4 adds:
+
+- `conversations`
+- `messages`
+
+Database relationships:
+
 ```text
-Phase 2.4 – Conversation and Message Management
-```  
+User
+ └── Digital Twin
+      └── Conversations
+           └── Messages 

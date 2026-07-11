@@ -93,14 +93,28 @@ class User(Base):
     )
 
     digital_twin = relationship(
-    "DigitalTwin",
-    back_populates="user",
-    uselist=False,
-    cascade="all, delete"
+        "DigitalTwin",
+        back_populates="user",
+        uselist=False,
+        cascade="all, delete"
     )
 
     memories = relationship(
-    "Memory",
-    back_populates="user",
-    cascade="all, delete-orphan"
+        "Memory",
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )
+
+    conversations = relationship(
+        "Conversation",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
+
+    messages = relationship(
+        "Message",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
     )

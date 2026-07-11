@@ -9,6 +9,62 @@ from app.exceptions.custom_exceptions import (
     NotFoundException,
 )
 
+from app.exceptions.conversation import (
+    ConversationNotFoundException,
+    EmptyConversationUpdateException,
+)
+
+from app.exceptions.message import (
+    InvalidMessageRoleException,
+    MessageNotFoundException,
+)
+
+
+async def conversation_not_found_handler(
+    request,
+    exc: ConversationNotFoundException,
+):
+    return JSONResponse(
+        status_code=404,
+        content={
+            "detail": exc.message
+        },
+    )
+
+
+async def empty_conversation_update_handler(
+    request,
+    exc: EmptyConversationUpdateException,
+):
+    return JSONResponse(
+        status_code=400,
+        content={
+            "detail": exc.message
+        },
+    )
+
+async def message_not_found_handler(
+    request,
+    exc: MessageNotFoundException,
+):
+    return JSONResponse(
+        status_code=404,
+        content={
+            "detail": exc.message
+        },
+    )
+
+
+async def invalid_message_role_handler(
+    request,
+    exc: InvalidMessageRoleException,
+):
+    return JSONResponse(
+        status_code=403,
+        content={
+            "detail": exc.message
+        },
+    )
 
 def register_exception_handlers(app: FastAPI):
 
@@ -90,3 +146,23 @@ def register_exception_handlers(app: FastAPI):
                 "message": "Internal Server Error"
             },
         )
+    
+    app.add_exception_handler(
+        ConversationNotFoundException,
+        conversation_not_found_handler,
+    )
+
+    app.add_exception_handler(
+        EmptyConversationUpdateException,
+        empty_conversation_update_handler,
+    )
+    
+    app.add_exception_handler(
+        MessageNotFoundException,
+        message_not_found_handler,
+    )
+
+    app.add_exception_handler(
+        InvalidMessageRoleException,
+        invalid_message_role_handler,
+    )

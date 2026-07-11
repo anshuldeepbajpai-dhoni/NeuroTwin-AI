@@ -70,7 +70,14 @@ class DigitalTwin(Base):
     )
 
     memories = relationship(
-    "Memory",
-    back_populates="digital_twin",
-    cascade="all, delete-orphan"
+        "Memory",
+        back_populates="digital_twin",
+        cascade="all, delete-orphan"
+    )
+
+    conversations = relationship(
+        "Conversation",
+        back_populates="digital_twin",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
     )

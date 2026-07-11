@@ -33,3 +33,11 @@ from .memory import (
     MemoryResponse,
     PaginatedMemoryResponse,
 )
+
+from .conversation import (
+    ConversationBase,
+    ConversationCreate,
+    ConversationUpdate,
+    ConversationResponse,
+    PaginatedConversationResponse,
+)

@@ -17,3 +17,13 @@ from .custom_exceptions import (
     EmptyMemoryUpdateException,
     MemoryNotFoundException,
 )
+
+from .conversation import (
+    ConversationNotFoundException,
+    EmptyConversationUpdateException,
+)
+
+from .message import (
+    InvalidMessageRoleException,
+    MessageNotFoundException,
+)
