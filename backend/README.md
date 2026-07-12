@@ -16,7 +16,8 @@ The backend is developed using FastAPI, PostgreSQL, SQLAlchemy, Alembic, Pydanti
 | Phase 2.2 | Profile and Digital Twin Management | ✅ Completed |
 | Phase 2.3 | Memory Management | ✅ Completed |
 | Phase 2.4 | Conversation and Message Management | ✅ Completed |
-| Phase 2.5 | AI Integration | ⏳ Upcoming |
+| Phase 2.5 | AI Integration | ✅ Completed |
+| Phase 2.6 | AI Intelligence and Memory System | ✅ Completed |
 
 Current backend progress:
 
@@ -25,6 +26,8 @@ Phase 2.1  ████████████████████  100%
 Phase 2.2  ████████████████████  100%
 Phase 2.3  ████████████████████  100%
 Phase 2.4  ████████████████████  100%
+Phase 2.5  ████████████████████  100%
+Phase 2.6  ████████████████████  100%
 ```
 
 ---
@@ -1122,3 +1125,124 @@ User
  └── Digital Twin
       └── Conversations
            └── Messages 
+
+## Phase 2.5 – AI Chat Engine
+
+Phase 2.5 introduces the core AI conversation engine for NeuroTwin AI. It connects the authenticated user's Digital Twin, saved memories, and recent conversation history to generate personalized AI responses.
+
+### Completed Features
+
+- AI provider configuration using environment variables
+- Secure OpenAI API key configuration
+- OpenAI client integration
+- Configurable AI model
+- Configurable temperature and token limits
+- AI request timeout handling
+- Digital Twin personality prompt generation
+- Relevant user memory retrieval
+- Memory-aware AI context generation
+- Recent conversation history integration
+- Configurable conversation history limits
+- AI context builder
+- User-message database storage
+- Assistant-message database storage
+- Personalized AI response generation
+- Authenticated AI chat endpoint
+- Conversation ownership validation
+- Digital Twin ownership validation
+- AI provider exception handling
+- OpenAI authentication error handling
+- OpenAI rate-limit and quota handling
+- AI service availability handling
+- Database rollback and failed-message cleanup
+- AI chat request and response schemas
+- Swagger API integration
+- Automated AI chat tests
+
+### AI Chat Processing Flow
+
+```text
+Authenticated User
+        |
+        v
+Conversation Validation
+        |
+        v
+Digital Twin Configuration
+        |
+        v
+Digital Twin Personality Prompt
+        |
+        v
+Relevant Saved Memories
+        |
+        v
+Recent Conversation History
+        |
+        v
+Complete AI Context
+        |
+        v
+OpenAI API
+        |
+        v
+Personalized AI Response
+        |
+        v
+Store User and Assistant Messages
+        |
+        v
+Return Chat Response
+
+## Phase 2.6 – AI Intelligence and Memory System
+
+Phase 2.6 extends NeuroTwin AI with intelligent provider fallback,
+automatic long-term memory extraction, duplicate prevention, memory
+updates, and conversation summarization.
+
+### Completed Features
+
+- OpenAI integration
+- Ollama local AI fallback
+- Automatic OpenAI-to-Ollama provider fallback
+- Structured memory extraction from user messages
+- AI memory validation using Pydantic
+- Automatic long-term memory storage
+- Duplicate memory prevention
+- Intelligent memory updates
+- Memory importance scoring from 1 to 5
+- Conversation summarization
+- Conversation summary database storage
+- Previous summary integration into future AI context
+- Graceful AI and memory-processing failure handling
+- Automated memory and summarization tests
+
+### AI Processing Flow
+
+```text
+User Message
+      |
+      v
+OpenAI Provider
+      |
+      | Provider unavailable or quota exceeded
+      v
+Ollama Local Fallback
+      |
+      v
+Personalized AI Response
+      |
+      v
+Automatic Memory Extraction
+      |
+      +--> Duplicate Memory --> Skip
+      |
+      +--> Related Memory --> Update
+      |
+      +--> New Memory --> Save
+      |
+      v
+Conversation Summarization
+      |
+      v
+Summary Stored for Future AI Context

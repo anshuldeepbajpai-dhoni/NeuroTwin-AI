@@ -1,6 +1,10 @@
 from sqlalchemy.orm import Session
 
+from app.crud.conversation import (
+    get_conversation_by_id,
+)
 from app.models.digital_twin import DigitalTwin
+from app.models.user import User
 from app.services.conversation_context import (
     conversation_context_builder,
 )
@@ -27,8 +31,8 @@ class AIContextBuilder:
     ) -> list[dict[str, str]]:
         """
         Combine the Digital Twin prompt,
-        saved memories, and recent
-        conversation history.
+        saved memories, conversation summary,
+        and recent conversation history.
         """
 
         system_prompt = (
@@ -41,7 +45,9 @@ class AIContextBuilder:
             memory_context_builder.build_context(
                 db=db,
                 user_id=user_id,
-                digital_twin_id=digital_twin.id,
+                digital_twin_id=(
+                    digital_twin.id
+                ),
             )
         )
 
@@ -62,15 +68,32 @@ class AIContextBuilder:
             "the latest message."
         )
 
-        conversation_history = (
-            conversation_context_builder
-            .build_context(
-                db=db,
-                conversation_id=(
-                    conversation_id
-                ),
-                user_id=user_id,
+        conversation = (
+            db.query(
+                __import__(
+                    "app.models.conversation",
+                    fromlist=[
+                        "Conversation"
+                    ],
+                ).Conversation
             )
+            .filter(
+                __import__(
+                    "app.models.conversation",
+                    fromlist=[
+                        "Conversation"
+                    ],
+                ).Conversation.id
+                == conversation_id,
+                __import__(
+                    "app.models.conversation",
+                    fromlist=[
+                        "Conversation"
+                    ],
+                ).Conversation.user_id
+                == user_id,
+            )
+            .first()
         )
 
         messages = [
@@ -81,6 +104,32 @@ class AIContextBuilder:
                 ),
             }
         ]
+
+        if (
+            conversation
+            and conversation.summary
+        ):
+            messages.append(
+                {
+                    "role": "system",
+                    "content": (
+                        "Previous conversation "
+                        "summary:\n"
+                        f"{conversation.summary}"
+                    ),
+                }
+            )
+
+        conversation_history = (
+            conversation_context_builder
+            .build_context(
+                db=db,
+                conversation_id=(
+                    conversation_id
+                ),
+                user_id=user_id,
+            )
+        )
 
         messages.extend(
             conversation_history

@@ -10,6 +10,13 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
 from app.database.base import Base
+from sqlalchemy import (
+    Boolean,
+    Column,
+    DateTime,
+    String,
+    Text,
+)
 
 
 class Conversation(Base):
@@ -81,4 +88,9 @@ class Conversation(Base):
         back_populates="conversation",
         cascade="all, delete-orphan",
         passive_deletes=True,
+    )
+
+    summary = Column(
+        Text,
+        nullable=True,
     )

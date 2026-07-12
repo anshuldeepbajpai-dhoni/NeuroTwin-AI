@@ -166,6 +166,29 @@ def chat_with_digital_twin(
     db=db,
     current_user=current_user,
     user_message=chat_data.message,
+    )
+
+    from app.models.message import Message
+    from app.services.conversation_summary import (
+    conversation_summary_service,
+    )
+
+    conversation_messages = (
+    db.query(Message)
+    .filter(
+        Message.conversation_id
+        == conversation.id
+    )
+    .order_by(
+        Message.created_at.asc()
+    )
+    .all()
+    )
+
+    conversation_summary_service.update_summary(
+        db=db,
+        conversation=conversation,
+        messages=conversation_messages,
     )         
 
     return AIChatResponse(

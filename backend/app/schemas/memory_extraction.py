@@ -43,7 +43,7 @@ class MemoryExtractionResult(BaseModel):
     importance: int | None = Field(
         default=None,
         ge=1,
-        le=10,
+        le=5,
     )
 
     @model_validator(

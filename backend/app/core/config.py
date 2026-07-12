@@ -87,5 +87,11 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
+    # Conversation summarization
+
+    ai_summary_min_messages: int = 10
+
+    ai_summary_max_characters: int = 2000
+
 
 settings = Settings()

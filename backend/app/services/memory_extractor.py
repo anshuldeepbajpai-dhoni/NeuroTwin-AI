@@ -231,11 +231,11 @@ def _clean_json_response(
         """
 
         return {
-            "should_save": False,
-            "title": None,
-            "content": None,
-            "category": None,
-            "importance": None,
+            "should_save": True,
+            "title": "Short memory title",
+            "content": 'clear memory statement',
+            "category": "goal",
+            "importance": 5,
         }
 
 

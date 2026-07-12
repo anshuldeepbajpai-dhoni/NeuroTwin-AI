@@ -54,6 +54,11 @@ from .automatic_memory import (
     AutomaticMemoryService,
     automatic_memory_service,
 )
+from .conversation_summarizer import (
+    ConversationSummarizer,
+    conversation_summarizer,
+)
+
 
 __all__ = [
     "AIClient",
@@ -80,4 +85,6 @@ __all__ = [
     "memory_extractor",
     "AutomaticMemoryService",
     "automatic_memory_service",
+    "ConversationSummarizer",
+    "conversation_summarizer",
 ]
