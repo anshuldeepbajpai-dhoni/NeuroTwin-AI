@@ -38,6 +38,23 @@ from .conversation_title import (
     conversation_title_service,
 )
 
+from .ollama_client import (
+    OllamaClient,
+    ollama_client,
+)
+from .ai_provider import (
+    AIProviderService,
+    ai_provider_service,
+)
+from .memory_extractor import (
+    MemoryExtractor,
+    memory_extractor,
+)
+from .automatic_memory import (
+    AutomaticMemoryService,
+    automatic_memory_service,
+)
+
 __all__ = [
     "AIClient",
     "ai_client",
@@ -55,4 +72,12 @@ __all__ = [
     "ai_chat_service",
     "ConversationTitleService",
     "conversation_title_service",
+    "OllamaClient",
+    "ollama_client",
+    "AIProviderService",
+    "ai_provider_service",
+    "MemoryExtractor",
+    "memory_extractor",
+    "AutomaticMemoryService",
+    "automatic_memory_service",
 ]

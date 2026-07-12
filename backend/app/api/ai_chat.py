@@ -34,6 +34,9 @@ from app.services.ai_chat import (
 from app.services.conversation_title import (
     conversation_title_service,
 )
+from app.services.automatic_memory import (
+    automatic_memory_service,
+)
 
 
 router = APIRouter(
@@ -157,7 +160,13 @@ def chat_with_digital_twin(
 
             db.commit()
 
-        raise         
+        raise
+
+    automatic_memory_service.process_message(
+    db=db,
+    current_user=current_user,
+    user_message=chat_data.message,
+    )         
 
     return AIChatResponse(
         user_message=user_message,

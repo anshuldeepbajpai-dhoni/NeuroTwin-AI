@@ -31,7 +31,8 @@ def test_ai_chat_request_rejects_empty_message():
 
 @patch(
     "app.services.ai_response."
-    "ai_client.generate_response"
+    "ai_provider_service."
+    "generate_response"
 )
 @patch(
     "app.services.ai_response."

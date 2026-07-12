@@ -66,6 +66,18 @@ class Settings(BaseSettings):
 
     ai_max_memories: int = 10
 
+    # Ollama local AI fallback
+
+    ollama_base_url: str = (
+        "http://localhost:11434"
+    )
+
+    ollama_model: str = (
+        "llama3.2:3b"
+    )
+
+    ai_fallback_enabled: bool = True
+
 
     # Pydantic settings configuration
 

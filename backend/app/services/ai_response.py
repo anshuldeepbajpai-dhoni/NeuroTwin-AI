@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 
 from app.models.digital_twin import DigitalTwin
-from app.services.ai_client import (
-    ai_client,
+from app.services.ai_provider import (
+    ai_provider_service,
 )
 from app.services.ai_context import (
     ai_context_builder,
@@ -58,11 +58,11 @@ class AIResponseService:
         )
 
         ai_response = (
-            ai_client.generate_response(
+            ai_provider_service
+            .generate_response(
                 messages=messages
             )
         )
-
         return ai_response
 
 

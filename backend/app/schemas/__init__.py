@@ -46,3 +46,8 @@ from .ai_chat import (
     AIChatRequest,
     AIChatResponse,
 )
+
+from .memory_extraction import (
+    MemoryCategory,
+    MemoryExtractionResult,
+)
