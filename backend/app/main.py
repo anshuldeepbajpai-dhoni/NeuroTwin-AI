@@ -50,6 +50,9 @@ from app.api.conversation import (
 from app.api.message import (
     router as message_router,
 )
+from app.api.ai_chat import (
+    router as ai_chat_router,
+)
 
 # Log application startup
 logger.info("Starting NeuroTwin AI Backend...")
@@ -119,6 +122,9 @@ app.include_router(
 )
 app.include_router(
     message_router
+)
+app.include_router(
+    ai_chat_router
 )
 
 # CORS Configuration

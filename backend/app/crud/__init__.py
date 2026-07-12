@@ -25,6 +25,7 @@ from .conversation import (
 )
 
 from .message import (
+    create_assistant_message,
     create_internal_message,
     create_message,
     delete_message,

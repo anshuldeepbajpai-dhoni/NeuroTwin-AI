@@ -41,3 +41,8 @@ from .conversation import (
     ConversationResponse,
     PaginatedConversationResponse,
 )
+
+from .ai_chat import (
+    AIChatRequest,
+    AIChatResponse,
+)

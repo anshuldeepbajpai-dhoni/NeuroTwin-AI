@@ -311,3 +311,40 @@ def delete_message(
             "Message deleted successfully."
         )
     }
+
+def create_assistant_message(
+    db: Session,
+    conversation_id: str,
+    user_id: str,
+    content: str,
+) -> Message:
+    """
+    Create and save an AI-generated
+    assistant message internally.
+    """
+
+    clean_content = content.strip()
+
+    if not clean_content:
+        raise ValueError(
+            "Assistant message cannot be empty."
+        )
+
+    assistant_message = Message(
+        conversation_id=conversation_id,
+        user_id=user_id,
+        role="assistant",
+        content=clean_content,
+    )
+
+    db.add(
+        assistant_message
+    )
+
+    db.commit()
+
+    db.refresh(
+        assistant_message
+    )
+
+    return assistant_message
