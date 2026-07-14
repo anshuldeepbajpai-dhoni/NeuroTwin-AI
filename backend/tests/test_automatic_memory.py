@@ -234,7 +234,7 @@ def test_new_memory_is_created(
     )
 
     memory_data = (
-        call_arguments["memory_data"]
+        call_arguments["memory"]
     )
 
     assert (

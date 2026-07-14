@@ -109,7 +109,7 @@ class AutomaticMemoryService:
             return create_memory(
                 db=db,
                 current_user=current_user,
-                memory_data=memory_data,
+                memory=memory_data,
             )
 
         except Exception as error:
