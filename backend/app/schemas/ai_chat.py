@@ -19,7 +19,7 @@ class AIChatRequest(BaseModel):
     message: str = Field(
         ...,
         min_length=1,
-        max_length=10000,
+        max_length=5000,
         description=(
             "Message sent by the user "
             "to the Digital Twin."

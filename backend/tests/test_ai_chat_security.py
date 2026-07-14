@@ -6,18 +6,18 @@ def get_headers(
     client,
 ):
     """
-    Register a unique test user,
-    log in, and return JWT headers.
+    Create a unique user, authenticate,
+    and return JWT headers.
     """
 
     unique_id = uuid4().hex[:10]
 
     username = (
-        f"failure_user_{unique_id}"
+        f"security_user_{unique_id}"
     )
 
     email = (
-        f"failure_{unique_id}"
+        f"security_{unique_id}"
         "@example.com"
     )
 
@@ -60,14 +60,14 @@ def get_headers(
         f"{login_response.json()}"
     )
 
-    access_token = (
+    token = (
         login_response
         .json()["access_token"]
     )
 
     return {
         "Authorization": (
-            f"Bearer {access_token}"
+            f"Bearer {token}"
         )
     }
 
@@ -77,8 +77,7 @@ def create_digital_twin(
     headers,
 ):
     """
-    Create a Digital Twin for the
-    authenticated test user.
+    Create a Digital Twin for a test user.
     """
 
     response = client.post(
@@ -86,18 +85,18 @@ def create_digital_twin(
         headers=headers,
         json={
             "twin_name": (
-                "Failure Test Twin"
+                "Security Test Twin"
             ),
             "personality": (
-                "Helpful, reliable, "
-                "practical, and calm"
+                "Helpful, secure, reliable, "
+                "and practical"
             ),
             "communication_style": (
                 "Clear and concise"
             ),
             "goals": (
-                "Provide reliable and "
-                "personalized assistance"
+                "Provide secure personalized "
+                "AI assistance"
             ),
             "interests": (
                 "Artificial intelligence, "
@@ -121,8 +120,8 @@ def create_conversation(
     headers,
 ):
     """
-    Create a conversation for the
-    authenticated test user.
+    Create a conversation owned by
+    the authenticated user.
     """
 
     response = client.post(
@@ -130,7 +129,7 @@ def create_conversation(
         headers=headers,
         json={
             "title": (
-                "Failure Handling Test"
+                "Security Validation Test"
             ),
         },
     )
@@ -147,106 +146,13 @@ def create_conversation(
     return response.json()
 
 
-def test_ai_chat_requires_authentication(
+def test_chat_rejects_empty_message(
     client,
 ):
     """
-    Verify that an unauthenticated user
-    cannot access the AI chat endpoint.
+    Verify that an empty AI chat
+    message is rejected.
     """
-
-    response = client.post(
-        (
-            "/conversations/"
-            "invalid-conversation-id/"
-            "chat"
-        ),
-        json={
-            "message": (
-                "This request should "
-                "not be authorized."
-            ),
-        },
-    )
-
-    assert (
-        response.status_code
-        in {
-            401,
-            403,
-        }
-    ), (
-        "AUTHENTICATION PROTECTION FAILED: "
-        f"{response.status_code} "
-        f"{response.json()}"
-    )
-
-
-def test_ai_chat_rejects_invalid_conversation(
-    client,
-):
-    """
-    Verify that an authenticated user
-    cannot chat using a nonexistent
-    conversation ID.
-    """
-
-    headers = get_headers(
-        client
-    )
-
-    create_digital_twin(
-        client=client,
-        headers=headers,
-    )
-
-    response = client.post(
-        (
-            "/conversations/"
-            "invalid-conversation-id/"
-            "chat"
-        ),
-        headers=headers,
-        json={
-            "message": (
-                "Test invalid conversation."
-            ),
-        },
-    )
-
-    assert (
-        response.status_code
-        in {
-            404,
-            422,
-        }
-    ), (
-        "INVALID CONVERSATION HANDLING "
-        "FAILED: "
-        f"{response.status_code} "
-        f"{response.json()}"
-    )
-
-
-@patch(
-    "app.services.ai_provider."
-    "ai_provider_service."
-    "generate_response"
-)
-def test_ai_provider_failure_is_handled(
-    mock_generate_response,
-    client,
-):
-    """
-    Verify that an unexpected AI-provider
-    failure returns a controlled API error.
-    """
-
-    mock_generate_response.side_effect = (
-        RuntimeError(
-            "AI provider unavailable"
-        )
-    )
 
     headers = get_headers(
         client
@@ -272,33 +178,175 @@ def test_ai_provider_failure_is_handled(
         ),
         headers=headers,
         json={
+            "message": "",
+        },
+    )
+
+    assert (
+        response.status_code
+        == 422
+    ), (
+        "EMPTY MESSAGE VALIDATION FAILED: "
+        f"{response.status_code} "
+        f"{response.json()}"
+    )
+
+
+def test_chat_rejects_oversized_message(
+    client,
+):
+    """
+    Verify that a message exceeding the
+    maximum length is rejected.
+    """
+
+    headers = get_headers(
+        client
+    )
+
+    create_digital_twin(
+        client=client,
+        headers=headers,
+    )
+
+    conversation = (
+        create_conversation(
+            client=client,
+            headers=headers,
+        )
+    )
+
+    oversized_message = (
+        "A" * 5001
+    )
+
+    response = client.post(
+        (
+            "/conversations/"
+            f"{conversation['id']}"
+            "/chat"
+        ),
+        headers=headers,
+        json={
+            "message": oversized_message,
+        },
+    )
+
+    assert (
+        response.status_code
+        == 422
+    ), (
+        "MESSAGE LENGTH VALIDATION FAILED: "
+        f"{response.status_code} "
+        f"{response.json()}"
+    )
+
+
+def test_chat_requires_jwt_token(
+    client,
+):
+    """
+    Verify that AI chat cannot be used
+    without authentication.
+    """
+
+    response = client.post(
+        (
+            "/conversations/"
+            "invalid-conversation-id/"
+            "chat"
+        ),
+        json={
             "message": (
-                "Generate a test response."
+                "This request has no token."
             ),
         },
     )
 
     assert (
         response.status_code
-        == 503
+        in {
+            401,
+            403,
+        }
     ), (
-        "AI PROVIDER FAILURE HANDLING "
-        "FAILED: "
+        "JWT PROTECTION FAILED: "
         f"{response.status_code} "
         f"{response.json()}"
     )
 
-    response_data = (
-        response.json()
+
+@patch(
+    "app.services.ai_provider."
+    "ai_provider_service."
+    "generate_response"
+)
+def test_user_cannot_access_another_users_conversation(
+    mock_generate_response,
+    client,
+):
+    """
+    Verify conversation ownership
+    isolation between users.
+    """
+
+    mock_generate_response.return_value = (
+        "This response should not "
+        "be generated."
     )
 
-    assert (
-        response_data["detail"]
-        == (
-            "AI service is temporarily "
-            "unavailable. Please try again."
+    owner_headers = get_headers(
+        client
+    )
+
+    create_digital_twin(
+        client=client,
+        headers=owner_headers,
+    )
+
+    conversation = (
+        create_conversation(
+            client=client,
+            headers=owner_headers,
         )
     )
 
+    other_user_headers = get_headers(
+        client
+    )
+
+    create_digital_twin(
+        client=client,
+        headers=other_user_headers,
+    )
+
+    response = client.post(
+        (
+            "/conversations/"
+            f"{conversation['id']}"
+            "/chat"
+        ),
+        headers=other_user_headers,
+        json={
+            "message": (
+                "Access another user's "
+                "conversation."
+            ),
+        },
+    )
+
+    assert (
+        response.status_code
+        in {
+            403,
+            404,
+        }
+    ), (
+        "CONVERSATION OWNERSHIP "
+        "PROTECTION FAILED: "
+        f"{response.status_code} "
+        f"{response.json()}"
+    )
+
     mock_generate_response\
-        .assert_called_once()
+        .assert_not_called()

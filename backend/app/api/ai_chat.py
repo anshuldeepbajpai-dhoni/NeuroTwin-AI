@@ -2,6 +2,7 @@ from fastapi import (
     APIRouter,
     Depends,
     status,
+    HTTPException,
 )
 from sqlalchemy.orm import Session
 
@@ -17,6 +18,7 @@ from app.crud.message import (
 from app.database.session import (
     get_db,
 )
+from app.core.logger import logger
 from app.dependencies.auth import (
     get_current_user,
 )
@@ -37,6 +39,7 @@ from app.services.conversation_title import (
 from app.services.automatic_memory import (
     automatic_memory_service,
 )
+
 
 
 router = APIRouter(
@@ -137,7 +140,7 @@ def chat_with_digital_twin(
             )
         )
 
-    except Exception:
+    except Exception as error:
 
         db.rollback()
 
@@ -160,13 +163,31 @@ def chat_with_digital_twin(
 
             db.commit()
 
-        raise
+        raise HTTPException(
+            status_code=(
+                status.HTTP_503_SERVICE_UNAVAILABLE
+            ),
+            detail=(
+                "AI service is temporarily "
+                "unavailable. Please try again."
+            ),
+        ) from error
 
-    automatic_memory_service.process_message(
-    db=db,
-    current_user=current_user,
-    user_message=chat_data.message,
-    )
+    try:
+
+        automatic_memory_service.process_message(
+            db=db,
+            current_user=current_user,
+            user_message=chat_data.message,
+        )
+
+    except Exception as error:
+
+        logger.warning(
+            "Automatic memory processing "
+            "failed after successful chat: %s",
+            error,
+        )
 
     from app.models.message import Message
     from app.services.conversation_summary import (
@@ -185,11 +206,21 @@ def chat_with_digital_twin(
     .all()
     )
 
-    conversation_summary_service.update_summary(
-        db=db,
-        conversation=conversation,
-        messages=conversation_messages,
-    )         
+    try:
+
+        conversation_summary_service.update_summary(
+            db=db,
+            conversation=conversation,
+            messages=conversation_messages,
+        )
+
+    except Exception as error:
+
+        logger.warning(
+            "Conversation summary processing "
+            "failed after successful chat: %s",
+            error,
+        )
 
     return AIChatResponse(
         user_message=user_message,
