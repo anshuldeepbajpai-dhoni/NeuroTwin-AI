@@ -34,3 +34,10 @@ logs/
 
 uploads/
 backend/uploads/
+# Private keys and certificates
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
