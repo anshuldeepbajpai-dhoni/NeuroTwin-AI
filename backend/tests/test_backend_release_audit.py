@@ -134,10 +134,6 @@ def test_core_public_routes_are_registered():
         ),
         (
             "GET",
-            "/health",
-        ),
-        (
-            "GET",
             "/version",
         ),
         (
@@ -160,6 +156,38 @@ def test_core_public_routes_are_registered():
         f"{missing_routes}"
     )
 
+
+def test_health_router_is_configured():
+    """
+    Verify application health,
+    liveness, and readiness endpoints.
+    """
+
+    from app.api.health import (
+        router as health_router,
+    )
+
+    health_routes = (
+        get_router_routes(
+            health_router
+        )
+    )
+
+    assert (
+        "GET",
+        "/health",
+    ) in health_routes
+
+    assert (
+        "GET",
+        "/health/liveness",
+    ) in health_routes
+
+    assert (
+        "GET",
+        "/health/readiness",
+    ) in health_routes
+    
 
 def test_authentication_router_is_configured():
     """

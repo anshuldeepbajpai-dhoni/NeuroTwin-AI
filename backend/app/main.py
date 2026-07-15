@@ -53,7 +53,12 @@ from app.database.database import engine
 from app.exceptions import (
     register_exception_handlers,
 )
-
+from app.api.health import (
+    router as health_router,
+)
+from app.middleware.request_logging import (
+    RequestLoggingMiddleware,
+)
 
 # ======================================================
 # Application Startup
@@ -204,6 +209,9 @@ register_exception_handlers(
 # ======================================================
 # API Routers
 # ======================================================
+app.include_router(
+    health_router
+)
 
 app.include_router(
     auth_router
@@ -250,7 +258,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
+app.add_middleware(
+    RequestLoggingMiddleware
+)
 
 # ======================================================
 # Static File Configuration
@@ -293,25 +303,6 @@ def root():
         "health": "/health",
     }
 
-
-@app.get(
-    "/health",
-    tags=["Health"],
-    summary="Health Check",
-)
-def health():
-
-    logger.info(
-        "Health endpoint accessed"
-    )
-
-    return {
-        "status": "Healthy",
-        "message": (
-            "Backend is running "
-            "successfully"
-        ),
-    }
 
 
 @app.get(
