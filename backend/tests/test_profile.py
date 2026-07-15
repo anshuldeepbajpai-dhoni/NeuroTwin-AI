@@ -1,34 +1,88 @@
-def get_headers(client):
+from uuid import uuid4
 
-    response = client.post(
-        "/auth/login",
-        data={
-            "username": "admin@gmail.com",
-            "password": "Pass@123"
-        }
+
+def get_headers(
+    client,
+):
+    """
+    Register and authenticate a unique
+    test user.
+    """
+
+    unique_id = uuid4().hex[:10]
+
+    username = (
+        f"test_user_{unique_id}"
     )
 
-    token = response.json()["access_token"]
-
-    return {
-        "Authorization": f"Bearer {token}"
-    }
-
-
-def get_headers(client):
-    response = client.post(
-        "/auth/login",
-        data={
-            "username": "admin@gmail.com",
-            "password": "Pass@123"
-        }
+    email = (
+        f"test_{unique_id}"
+        "@example.com"
     )
 
-    token = response.json()["access_token"]
+    password = (
+        "Pass@123"
+    )
+
+    register_response = client.post(
+        "/auth/register",
+        json={
+            "username": username,
+            "email": email,
+            "password": password,
+        },
+    )
+
+    assert (
+        register_response.status_code
+        == 201
+    ), (
+        "TEST USER REGISTRATION FAILED: "
+        f"{register_response.status_code} "
+        f"{register_response.json()}"
+    )
+
+    login_response = client.post(
+        "/auth/login",
+        data={
+            "username": email,
+            "password": password,
+        },
+    )
+
+    assert (
+        login_response.status_code
+        == 200
+    ), (
+        "TEST USER LOGIN FAILED: "
+        f"{login_response.status_code} "
+        f"{login_response.json()}"
+    )
+
+    response_data = (
+        login_response.json()
+    )
+
+    assert (
+        "access_token"
+        in response_data
+    ), (
+        "ACCESS TOKEN MISSING: "
+        f"{response_data}"
+    )
+
+    token = (
+        response_data[
+            "access_token"
+        ]
+    )
 
     return {
-        "Authorization": f"Bearer {token}"
+        "Authorization": (
+            f"Bearer {token}"
+        )
     }
+
 
 
 def test_get_profile(client):

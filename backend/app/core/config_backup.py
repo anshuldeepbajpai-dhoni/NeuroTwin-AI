@@ -21,8 +21,6 @@ class Settings(BaseSettings):
 
     app_description: str
 
-    environment: str = "development"
-
 
     # Debug
 
@@ -34,21 +32,6 @@ class Settings(BaseSettings):
     host: str
 
     port: int
-
-    # Production security
-
-    allowed_hosts: str = (
-        "localhost,"
-        "127.0.0.1,"
-        "testserver"
-    )
-
-    cors_origins: str = (
-        "http://localhost:3000,"
-        "http://localhost:5173"
-    )
-
-    enable_https_redirect: bool = False
 
 
     # Database

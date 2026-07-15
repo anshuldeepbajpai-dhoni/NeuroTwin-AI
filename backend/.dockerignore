@@ -1,0 +1,75 @@
+# Python cache
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+
+# Virtual environments
+
+.venv/
+venv/
+env/
+
+
+# Environment secrets
+
+.env
+.env.*
+!.env.example
+
+
+# Testing
+
+.pytest_cache/
+.coverage
+htmlcov/
+tests/
+
+
+# IDE configuration
+
+.vscode/
+.idea/
+
+
+# Git
+
+.git/
+.gitignore
+
+
+# Logs
+
+*.log
+logs/
+
+
+# Local databases
+
+*.db
+*.sqlite
+*.sqlite3
+
+
+# Build output
+
+build/
+dist/
+*.egg-info/
+
+
+# User-generated files
+
+uploads/
+
+
+# Operating-system files
+
+.DS_Store
+Thumbs.db
+
+
+# Docker development files
+
+docker-compose*.yml

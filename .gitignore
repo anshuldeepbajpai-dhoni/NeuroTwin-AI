@@ -1,19 +1,36 @@
-# Environment
+# Environment secrets
+
 .env
+.env.*
+!.env.example
+
 
 # Python
-__pycache__/
-*.pyc
 
-# Virtual Environment
+__pycache__/
+*.py[cod]
+
+
+# Virtual environments
+
 .venv/
+venv/
+
+
+# Testing
+
+.pytest_cache/
+.coverage
+htmlcov/
+
 
 # Logs
+
+*.log
 logs/
 
-# IDE
-.vscode/
-.idea/
 
-.env
-backend/.env
+# Runtime uploads
+
+uploads/
+backend/uploads/

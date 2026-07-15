@@ -47,7 +47,6 @@ from app.api.profile import (
 from app.core.config import settings
 from app.core.logger import logger
 
-from app.database.base import Base
 from app.database.database import engine
 
 from app.exceptions import (
@@ -58,6 +57,16 @@ from app.api.health import (
 )
 from app.middleware.request_logging import (
     RequestLoggingMiddleware,
+)
+from starlette.middleware.httpsredirect import (
+    HTTPSRedirectMiddleware,
+)
+from starlette.middleware.trustedhost import (
+    TrustedHostMiddleware,
+)
+
+from app.middleware.security_headers import (
+    SecurityHeadersMiddleware,
 )
 
 # ======================================================
@@ -188,14 +197,6 @@ Protected endpoints require:
 )
 
 
-# ======================================================
-# Database Initialization
-# ======================================================
-
-Base.metadata.create_all(
-    bind=engine
-)
-
 
 # ======================================================
 # Exception Handlers
@@ -241,23 +242,76 @@ app.include_router(
     ai_chat_router
 )
 
+# ======================================================
+# Production Security Configuration
+# ======================================================
+
+allowed_hosts = [
+    host.strip()
+    for host in (
+        settings.allowed_hosts.split(
+            ","
+        )
+    )
+    if host.strip()
+]
+
+cors_origins = [
+    origin.strip()
+    for origin in (
+        settings.cors_origins.split(
+            ","
+        )
+    )
+    if origin.strip()
+]
+
+
+app.add_middleware(
+    TrustedHostMiddleware,
+    allowed_hosts=allowed_hosts,
+)
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=cors_origins,
+    allow_credentials=True,
+    allow_methods=[
+        "GET",
+        "POST",
+        "PUT",
+        "PATCH",
+        "DELETE",
+        "OPTIONS",
+    ],
+    allow_headers=[
+        "Authorization",
+        "Content-Type",
+        "X-Request-ID",
+    ],
+    expose_headers=[
+        "X-Request-ID",
+        "X-Process-Time-MS",
+    ],
+)
+
+
+app.add_middleware(
+    SecurityHeadersMiddleware
+)
+
+
+if settings.enable_https_redirect:
+
+    app.add_middleware(
+        HTTPSRedirectMiddleware
+    )
 
 # ======================================================
 # CORS Configuration
 # ======================================================
 
-origins = [
-    "http://localhost:3000",
-    "http://localhost:5173",
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 app.add_middleware(
     RequestLoggingMiddleware
 )
