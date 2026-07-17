@@ -29,14 +29,6 @@ router = APIRouter(
     tags=["Authentication"]
 )
 
-# @router.post(
-#     "/register",
-#     response_model=UserResponse,
-#     status_code=status.HTTP_201_CREATED,
-#     summary="Register User",
-#     description="Create a new user account.",
-#     response_description="User created successfully."
-# )
 
 @router.post(
     "/register",
@@ -58,13 +50,7 @@ def register(
     return create_user(db, user)
 
 
-# @router.post(
-#     "/login",
-#     response_model=Token,
-#     summary="User Login",
-#     description="Authenticate user and return JWT access token.",
-#     response_description="JWT access token."
-# )
+
 
 @router.post(
     "/login",
