@@ -1,18 +1,13 @@
 export default function PageContainer({ children }) {
-
     return (
-
-        <div
+        <main
             style={{
+                flex: 1,
                 padding: "30px",
-                flex: 1
+                overflowY: "auto",
             }}
         >
-
             {children}
-
-        </div>
-
+        </main>
     );
-
 }

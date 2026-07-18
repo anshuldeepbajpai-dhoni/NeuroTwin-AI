@@ -1,9 +1,43 @@
-import MainLayout from "../../layouts/MainLayout";
+import ProfileCard from "../../components/profile/ProfileCard";
+import ProfileInfo from "../../components/profile/ProfileInfo";
+import EditProfileForm from "../../components/profile/EditProfileForm";
+import AvatarUpload from "../../components/profile/AvatarUpload";
+
 
 export default function Profile() {
+
     return (
-        <h1>
-            Profile
-        </h1>
+
+        <div
+            className="profile-grid"
+            style={{
+                display: "grid",
+                gridTemplateColumns: "350px 1fr",
+                gap: 30,
+            }}
+        >
+
+            <ProfileCard />
+
+            <div
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 30,
+                }}
+            >
+                <ProfileCard />
+
+                <ProfileInfo />
+
+                <EditProfileForm />
+
+                <AvatarUpload />
+
+            </div>
+
+        </div>
+
     );
+
 }

@@ -1,0 +1,25 @@
+:root{
+    --primary:#2563eb;
+    --primary-dark:#1d4ed8;
+
+    --success:#10b981;
+    --warning:#f59e0b;
+    --danger:#ef4444;
+
+    --bg:#f3f4f6;
+    --card:#ffffff;
+
+    --text:#111827;
+    --muted:#6b7280;
+
+    --sidebar:#111827;
+    --sidebar-hover:#1f2937;
+
+    --border:#e5e7eb;
+
+    --radius:14px;
+
+    --shadow:0 8px 20px rgba(0,0,0,.08);
+
+    --transition:.25s ease;
+}

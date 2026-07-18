@@ -1,86 +1,108 @@
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
-export default function Navbar() {
-    const navigate = useNavigate();
+export default function Navbar(){
 
-    const {
-        user,
-        logout,
-    } = useAuth();
+const {user,logout}=useAuth();
 
-    const handleLogout = () => {
-        logout();
-        navigate("/login");
-    };
+return(
 
-    return (
-        <header
-            style={{
-                height: "70px",
-                background: "#1E293B",
-                color: "#FFFFFF",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                padding: "0 30px",
-                boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-            }}
-        >
-            {/* Left Section */}
-            <div
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "12px",
-                }}
-            >
-                <h2
-                    style={{
-                        margin: 0,
-                        fontSize: "24px",
-                        fontWeight: "700",
-                    }}
-                >
-                    🧠 NeuroTwin AI
-                </h2>
-            </div>
+<header
+style={{
+height:70,
+background:"white",
+padding:"0 30px",
+display:"flex",
+justifyContent:"space-between",
+alignItems:"center",
+boxShadow:"var(--shadow)",
+zIndex:100,
+}}
+>
 
-            {/* Right Section */}
-            <div
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "15px",
-                }}
-            >
-                <span
-                    style={{
-                        fontSize: "15px",
-                    }}
-                >
-                    Welcome,
-                    <strong>
-                        {" "}
-                        {user?.username || user?.email || "User"}
-                    </strong>
-                </span>
+<div>
 
-                <button
-                    onClick={handleLogout}
-                    style={{
-                        background: "#EF4444",
-                        color: "#FFFFFF",
-                        border: "none",
-                        padding: "10px 18px",
-                        borderRadius: "6px",
-                        cursor: "pointer",
-                        fontWeight: "600",
-                    }}
-                >
-                    Logout
-                </button>
-            </div>
-        </header>
-    );
+<h2>
+
+NeuroTwin AI
+
+</h2>
+
+</div>
+
+<div
+style={{
+display:"flex",
+alignItems:"center",
+gap:20,
+}}
+>
+
+<div
+style={{
+textAlign:"right",
+}}
+>
+
+<strong>
+
+{user?.username}
+
+</strong>
+
+<br/>
+
+<small>
+
+{user?.email}
+
+</small>
+
+</div>
+
+<div
+style={{
+width:45,
+height:45,
+borderRadius:"50%",
+background:"var(--primary)",
+color:"white",
+display:"flex",
+justifyContent:"center",
+alignItems:"center",
+fontWeight:"bold",
+}}
+>
+
+{user?.username?.charAt(0)}
+
+</div>
+
+<div
+    style={{
+        width: 12,
+        height: 12,
+        borderRadius: "50%",
+        background: "#10b981",
+    }}
+/>
+
+<button
+style={{
+background:"var(--danger)",
+padding:"10px 18px",
+color:"white",
+}}
+onClick={logout}
+>
+
+Logout
+
+</button>
+
+</div>
+
+</header>
+
+);
+
 }

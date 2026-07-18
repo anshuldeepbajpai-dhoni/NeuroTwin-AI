@@ -1,41 +1,22 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 export default function Sidebar() {
 
     return (
 
-        <aside
-            style={{
-                width: "230px",
-                background: "#0F172A",
-                color: "white",
-                padding: "20px",
-                minHeight: "100vh"
-            }}
-        >
+        <aside className="sidebar">
 
-            <h2>Menu</h2>
+            <h2>🤖 NeuroTwin</h2>
 
-            <nav
-                style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "15px",
-                    marginTop: "30px"
-                }}
-            >
+            <NavLink to="/dashboard">Dashboard</NavLink>
 
-                <Link to="/">Dashboard</Link>
+            <NavLink to="/digital-twin">Digital Twin</NavLink>
 
-                <Link to="/digital-twin">Digital Twin</Link>
+            <NavLink to="/memory">Memory</NavLink>
 
-                <Link to="/chat">AI Chat</Link>
+            <NavLink to="/chat">AI Chat</NavLink>
 
-                <Link to="/memory">Memory</Link>
-
-                <Link to="/profile">Profile</Link>
-
-            </nav>
+            <NavLink to="/profile">Profile</NavLink>
 
         </aside>
 

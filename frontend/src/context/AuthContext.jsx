@@ -77,6 +77,23 @@ export function AuthProvider({ children }) {
 
     }
 
+    async function refreshUser() {
+
+        try {
+
+            const profile = await authService.profile();
+
+            setUser(profile);
+
+        } catch (error) {
+
+            console.error(error);
+
+        }
+
+    }
+
+
     function logout() {
 
         localStorage.removeItem("token");
@@ -93,6 +110,7 @@ export function AuthProvider({ children }) {
                 loading,
                 login,
                 register,
+                refreshUser,
                 logout,
                 isAuthenticated: !!user,
             }}

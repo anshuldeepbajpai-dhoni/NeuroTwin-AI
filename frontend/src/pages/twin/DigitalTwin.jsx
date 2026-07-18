@@ -1,9 +1,16 @@
-import MainLayout from "../../layouts/MainLayout";
+import DigitalTwinForm from "../../components/digitalTwin/DigitalTwinForm";
+import AppLayout from "../../components/layout/AppLayout";
 
 export default function DigitalTwin() {
+
     return (
-        <h1>
-            Digital Twin
-        </h1>
+
+        <AppLayout>
+
+            <DigitalTwinForm />
+
+        </AppLayout>
+
     );
+
 }

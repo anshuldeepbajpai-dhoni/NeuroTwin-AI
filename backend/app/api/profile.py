@@ -25,7 +25,7 @@ from app.crud.profile import (
 
 router = APIRouter(
     prefix="/users",
-    tags=["Users"]
+    tags=["Profile"]
 )
 
 

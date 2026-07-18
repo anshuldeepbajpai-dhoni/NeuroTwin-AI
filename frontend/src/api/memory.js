@@ -3,6 +3,9 @@ import api from "./api";
 export const getMemories = () =>
     api.get("/memories/");
 
+export const getMemory = (id) =>
+    api.get(`/memories/${id}`);
+
 export const createMemory = (data) =>
     api.post("/memories/", data);
 

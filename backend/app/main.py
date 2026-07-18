@@ -91,12 +91,6 @@ tags_metadata = [
         ),
     },
     {
-        "name": "Users",
-        "description": (
-            "User management APIs."
-        ),
-    },
-    {
         "name": "Profile",
         "description": (
             "User profile management APIs."

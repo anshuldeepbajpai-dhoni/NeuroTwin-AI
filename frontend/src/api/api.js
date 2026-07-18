@@ -13,14 +13,17 @@ api.interceptors.request.use(
 
         const token = localStorage.getItem("token");
 
+        console.log("REQUEST:", config.url);
+        console.log("TOKEN:", token);
+
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
+            console.log("AUTH HEADER:", config.headers.Authorization);
         }
 
         return config;
 
-    },
-    (error) => Promise.reject(error)
+    }
 );
 
 api.interceptors.response.use(

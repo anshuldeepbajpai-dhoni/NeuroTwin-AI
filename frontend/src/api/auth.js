@@ -16,10 +16,29 @@ export const loginUser = (data) =>
     );
 
 export const getProfile = () =>
-    api.get("/auth/me");
+    api.get("/users/profile");
 
-// Change this only if your backend has an update endpoint.
-// Otherwise leave it commented until you implement one.
+export const updateProfile = (data) =>
+    api.put("/users/profile", data);
 
-// export const updateProfile = (data) =>
-//     api.put("/profile", data);
+export const uploadAvatar = (file) => {
+
+    const formData = new FormData();
+
+    formData.append("file", file);
+
+    return api.patch(
+        "/users/profile/avatar",
+        formData,
+        {
+            headers: {
+                "Content-Type":
+                    "multipart/form-data",
+            },
+        }
+    );
+
+};
+
+export const deleteAvatar = () =>
+    api.delete("/users/profile/avatar");
